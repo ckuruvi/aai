@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html ng-app="aaiApp">
+
+<head>
+    <meta charset="utf-8">
+    <title>aai</title>
+    <link rel="stylesheet" href="vendors/bootstrap.min.css" media="screen" title="no title">
+    <link rel="stylesheet" href="css/styles.css" media="screen" title="no title">
+
+    <script src="vendors/angular.min.js" charset="utf-8"></script>
+    <script src="vendors/angular-route.min.js" charset="utf-8"></script>
+
+    <script src="scripts/app.module.js" charset="utf-8"></script>
+    <script src="scripts/app.config.js" charset="utf-8"></script>
+    <script src="scripts/home.controller.js" charset="utf-8"></script>
+    <script src="scripts/login.controller.js" charset="utf-8"></script>
+
+    <script src="scripts/home.service.js" charset="utf-8"></script>
+    <script src="scripts/login.service.js" charset="utf-8"></script>
+
+
+    <base href="/" />
+</head>
+
+<body class="container">
+    <div class="row text-center">
+        <h2>aai</h2>
+    </div>
+    <ng-view></ng-view>
+</body>
+
+</html>

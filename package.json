@@ -1,0 +1,26 @@
+{
+  "name": "aai",
+  "version": "1.0.0",
+  "description": "code challenge - August Ash",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ckuruvi/aai.git"
+  },
+  "author": "Charles Kuruvila",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ckuruvi/aai/issues"
+  },
+  "homepage": "https://github.com/ckuruvi/aai#readme",
+  "dependencies": {
+    "angular": "^1.6.4",
+    "angular-route": "^1.6.4",
+    "body-parser": "^1.17.1",
+    "bootstrap": "^3.3.7",
+    "express": "^4.15.2"
+  }
+}
