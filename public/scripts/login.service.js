@@ -3,9 +3,6 @@ app.service('LoginService', function($http){
 
 console.log(" inside LoginService ");
 
-var AUTH_TOKEN;
-
-
   this.authenticate = function(formdata){
 
     var body = {

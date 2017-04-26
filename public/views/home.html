@@ -1,3 +1,40 @@
-<div >
+<div class=container>
+
   <h2>welcome to home page</h2>
+
+
+<div id="add-video" >
+  <form class="form-horizontal" ng-submit="home.addVideo(home.formdata)">
+      <div class="form-group row">
+          <label class="control-label">Title:</label>
+          <input class="form-control" type="text" ng-model="home.formdata.title">
+      </div>
+      <div class="form-group row">
+          <label class="control-label">Url:</label>
+          <input class="form-control" type="text" ng-model="home.formdata.url">
+      </div>
+      <div class="form-group row">
+          <label class="control-label">Slug:</label>
+          <input class="form-control" type="text" ng-model="home.formdata.slug">
+      </div>
+      <div >
+          <button type="submit" class="btn btn-primary">Add video</button>
+      </div>
+  </form>
+
+
+
+</div>
+
+<div class="display" >
+<ul ng-repeat="x in home.videoList">
+  <li>
+    <strong>{{x.attributes.title}}</strong>
+    <a href="{{x.attributes.url}}" target="_blank">{{x.attributes.title}}</a>
+  </li>
+</ul>
+
+</div>
+
+
 </div>

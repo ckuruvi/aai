@@ -1,3 +1,4 @@
 node_modules
+json-files
 *.log
 .DS_Store

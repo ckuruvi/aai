@@ -1,16 +1,24 @@
-app.controller('HomeController', function(HomeService) {
+app.controller('HomeController', function(HomeService,$http) {
 
-    console.log('inside HomeController');
+    console.log('inside HomeController',$http.defaults.headers.common);
     var ctrl = this;
 
-      this.getAllVideos=function(){
+      ctrl.getAllVideos=function(){
 
         HomeService.getAllVideos().then( function(data){
+            console.log(data);
+           ctrl.videoList=data.data;
 
-          console.log(data);
         });
       }
 
-      this.getAllVideos();
+      ctrl.getAllVideos();
+
+      ctrl.addVideo=function(formdata){
+        HomeService.addVideo(formdata).then(function(data){
+          console.log("add video return data",data);
+          ctrl.getAllVideos();
+        });
+      }
 
 });

@@ -1,4 +1,4 @@
-app.controller('LoginController', function (LoginService,$location,$http,$rootScope) {
+app.controller('LoginController', function (LoginService,$location,$http) {
     console.log('LoginController loaded');
     var ctrl = this;
 
@@ -7,8 +7,7 @@ app.controller('LoginController', function (LoginService,$location,$http,$rootSc
         LoginService.authenticate(formdata).then(function(data){
 
           console.log("data",data);
-          $rootScope.auth_token=data.data.attributes.auth_token;
-          console.log("$rootscope",$rootScope.auth_token)
+          $http.defaults.headers.common={'X-Auth-Token' : data.data.attributes.auth_token};
           $location.path('/home');
 
         })
