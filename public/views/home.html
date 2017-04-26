@@ -30,7 +30,10 @@
 <ul ng-repeat="x in home.videoList">
   <li>
     <strong>{{x.attributes.title}}</strong>
-    <a href="{{x.attributes.url}}" target="_blank">{{x.attributes.title}}</a>
+    <a href="{{x.attributes.url}}" ng-click="home.createView(x)" target="_blank">{{x.attributes.title}}</a>
+     <span class="glyphicon glyphicon-thumbs-up" ng-click="home.voteUp(x)"></span>
+     <span class="glyphicon glyphicon-thumbs-down" ng-click="home.voteDown(x)"></span>
+
   </li>
 </ul>
 
