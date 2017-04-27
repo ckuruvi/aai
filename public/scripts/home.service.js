@@ -2,13 +2,13 @@ app.service('HomeService', function($http){
 
 console.log(" inside HomeService ",$http.defaults.headers.common);
 
-  this.getAllVideos = function(){
+  this.getAllVideos = function(sortingParamater){
     return  $http({
         url: 'https://proofapi.herokuapp.com/videos',
         method: 'GET'
       }).then(function(response){
-        console.log(response.data);
-        return response.data;
+        console.log("unsorted datalist",response.data.data);
+        return sortFunction(response.data.data,sortingParamater);
 
       },function(error){
         console.log(error);
@@ -79,6 +79,41 @@ console.log(" inside HomeService ",$http.defaults.headers.common);
       });
   };
 
+  this.getVotes=function(){
+
+    return  $http({
+        url: 'https://proofapi.herokuapp.com/votes',
+        method: 'GET',
+      }).then(function(response){
+        console.log(response.data);
+        return response.data;
+
+      },function(error){
+        console.log(error);
+      });
+  }
+
+  function sortFunction(dataList,sortingParamater){
+
+         if(sortingParamater == 'allvideos'){
+        dataList.sort(function(x,y){
+          return new Date(y.attributes.created_at).getTime() - new Date(x.attributes.created_at).getTime();
+        });
+      } else if(sortingParamater == 'toptenbyviews'){
+        dataList.sort(function(x,y){
+          return y.attributes.view_tally - x.attributes.view_tally;
+      });
+        dataList.splice(10,dataList.length-1);
+     }
+     else if(sortingParamater == 'toptenbyvotes'){
+       dataList.sort(function(x,y){
+         return y.attributes.vote_tally - x.attributes.vote_tally;
+     });
+       dataList.splice(10,dataList.length-1);
+    }
+        return dataList;
+
+  }
 
 
 });

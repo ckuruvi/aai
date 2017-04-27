@@ -3,16 +3,40 @@ app.controller('HomeController', function(HomeService,$http) {
     console.log('inside HomeController',$http.defaults.headers.common);
     var ctrl = this;
 
+    ctrl.getVotes=function(){
+      console.log("inside getVotes");
+      HomeService.getVotes().then(function(data){
+        console.log("getVotes data :",data);
+      })
+    }
+
       ctrl.getAllVideos=function(){
 
-        HomeService.getAllVideos().then( function(data){
+        HomeService.getAllVideos("allvideos").then( function(data){
             console.log(data);
-           ctrl.videoList=data.data;
-
+           ctrl.videoList=data;
+            //ctrl.getVotes();
         });
       }
 
       ctrl.getAllVideos();
+
+      ctrl.getTopVideosByViews=function(){
+
+        HomeService.getAllVideos("toptenbyviews").then( function(data){
+            console.log(data);
+           ctrl.videoList=data;
+            //ctrl.getVotes();
+        });
+      }
+
+      ctrl.getTopVideosByVotes=function(){
+        HomeService.getAllVideos("toptenbyvotes").then( function(data){
+            console.log(data);
+           ctrl.videoList=data;
+            //ctrl.getVotes();
+        });
+      }
 
       ctrl.addVideo=function(formdata){
         HomeService.addVideo(formdata).then(function(data){
@@ -38,6 +62,7 @@ app.controller('HomeController', function(HomeService,$http) {
         HomeService.voteUp(obj).then(function(data){
           console.log("voteUp return data",data);
           ctrl.getAllVideos();
+
         });
       }
 
@@ -49,5 +74,7 @@ app.controller('HomeController', function(HomeService,$http) {
           ctrl.getAllVideos();
         });
       }
+
+
 
 });
