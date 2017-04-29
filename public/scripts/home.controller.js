@@ -49,11 +49,22 @@ app.controller('HomeController', function(HomeService,$http,$rootScope) {
            return;
         }
 
-        HomeService.addVideo(formdata).then(function(data){
-          console.log("add video return data",data);
-          refreshVideoList();
-          //ctrl.getAllVideos();
+        HomeService.getAllVideos("allvideos").then( function(data){
+
+           data.forEach(function(videoObj){
+               if(videoObj.attributes.url==formdata.url){
+                 alert("duplicate entry");
+                 return;
+               }
+           });
+           HomeService.addVideo(formdata).then(function(data){
+             console.log("add video return data",data);
+             refreshVideoList();
+
+           });
+
         });
+
       }
 
       ctrl.createView=function(data){
