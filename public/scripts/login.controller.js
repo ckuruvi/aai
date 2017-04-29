@@ -1,9 +1,11 @@
-app.controller('LoginController', function (LoginService,$location,$http) {
+app.controller('LoginController', function (LoginService,$location,$http,$rootScope) {
     console.log('LoginController loaded');
     var ctrl = this;
 
     ctrl.authenticate = function(formdata) {
-
+          console.log("login formdata",formdata);
+          //save user id to root scope
+          $rootScope.userId='charleskuruvila@gmail.com';
         LoginService.authenticate(formdata).then(function(data){
 
           console.log("data",data);

@@ -47,6 +47,8 @@ console.log(" inside HomeService ",$http.defaults.headers.common);
       });
   };
 
+
+
   this.voteUp = function(data){
     var jsonObj=JSON.stringify(data);
     console.log("voteUp json object",jsonObj);
@@ -92,6 +94,22 @@ console.log(" inside HomeService ",$http.defaults.headers.common);
         console.log(error);
       });
   }
+
+  this.voteCheck=function(videoId,userId){
+   console.log("inside service voteCheck function");
+    return  $http({
+        url:'/uservotes',
+        method: 'POST',
+        data:{'videoId':videoId,'userId':userId}
+      }).then(function(response){
+        console.log("votcheck response fro server ::",response);
+        return response.data;
+
+      },function(error){
+        console.log(error);
+      });
+  }
+
 
   function sortFunction(dataList,sortingParamater){
 

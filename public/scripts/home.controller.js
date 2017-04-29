@@ -1,7 +1,8 @@
-app.controller('HomeController', function(HomeService,$http) {
+app.controller('HomeController', function(HomeService,$http,$rootScope) {
 
     console.log('inside HomeController',$http.defaults.headers.common);
     var ctrl = this;
+    var apiCall;
 
     ctrl.getVotes=function(){
       console.log("inside getVotes");
@@ -10,8 +11,10 @@ app.controller('HomeController', function(HomeService,$http) {
       })
     }
 
-      ctrl.getAllVideos=function(){
 
+
+      ctrl.getAllVideos=function(){
+        apiCall='allvideos';
         HomeService.getAllVideos("allvideos").then( function(data){
             console.log(data);
            ctrl.videoList=data;
@@ -22,7 +25,7 @@ app.controller('HomeController', function(HomeService,$http) {
       ctrl.getAllVideos();
 
       ctrl.getTopVideosByViews=function(){
-
+        apiCall="toptenbyviews";
         HomeService.getAllVideos("toptenbyviews").then( function(data){
             console.log(data);
            ctrl.videoList=data;
@@ -31,6 +34,7 @@ app.controller('HomeController', function(HomeService,$http) {
       }
 
       ctrl.getTopVideosByVotes=function(){
+        apiCall="toptenbyvotes";
         HomeService.getAllVideos("toptenbyvotes").then( function(data){
             console.log(data);
            ctrl.videoList=data;
@@ -39,9 +43,16 @@ app.controller('HomeController', function(HomeService,$http) {
       }
 
       ctrl.addVideo=function(formdata){
+
+        if(dayOfTheWeek()==5 || dayOfTheWeek()==0){
+          alert("cannot vote on weekends");
+           return;
+        }
+
         HomeService.addVideo(formdata).then(function(data){
           console.log("add video return data",data);
-          ctrl.getAllVideos();
+          refreshVideoList();
+          //ctrl.getAllVideos();
         });
       }
 
@@ -51,30 +62,76 @@ app.controller('HomeController', function(HomeService,$http) {
         console.log("inside createView",obj);
         HomeService.createView(obj).then(function(data){
           console.log("createView return data",data);
-          ctrl.getAllVideos();
+          refreshVideoList();
+          //ctrl.getAllVideos();
         });
 
       }
 
       ctrl.voteUp=function(data){
+
+        if(dayOfTheWeek()==5 || dayOfTheWeek()==0){
+          alert("cannot vote on weekends");
+           return;
+        }
         var obj={video_id:data.id,opinion:1}
-        console.log("inside voteUp",obj);
-        HomeService.voteUp(obj).then(function(data){
-          console.log("voteUp return data",data);
-          ctrl.getAllVideos();
+        console.log("inside voteUp",obj,$rootScope.userId);
+        HomeService.voteCheck(data.id,$rootScope.userId).then(function(data){
+
+             if(!data.hasVoted){
+               HomeService.voteUp(obj).then(function(data){
+                 console.log("voteUp return data",data);
+                 refreshVideoList();
+                 //ctrl.getAllVideos();
+               });
+             } else {
+               alert("you can only vote once in a day");
+             }
 
         });
+
       }
 
       ctrl.voteDown=function(data){
+        if(dayOfTheWeek()==5 || dayOfTheWeek()==0){
+          alert("cannot vote on weekends");
+           return;
+        }
         var obj={video_id:data.id,opinion:-1}
-        console.log("inside voteUp",obj);
-        HomeService.voteDown(obj).then(function(data){
-          console.log("voteDown return data",data);
-          ctrl.getAllVideos();
-        });
+
+  HomeService.voteCheck(data.id,$rootScope.userId).then(function(data){
+
+    if(!data.hasVoted){
+      HomeService.voteDown(obj).then(function(data){
+        console.log("voteDown return data",data);
+        refreshVideoList();
+      });
+    } else {
+      alert("you can only vote once in a day");
+    }
+
+      });
       }
 
+
+      function  dayOfTheWeek(){
+          return new Date().getDay();
+      }
+
+      function refreshVideoList(){
+        switch(apiCall){
+            case 'toptenbyviews':
+                  ctrl.getTopVideosByViews();
+                  break;
+            case 'toptenbyvotes':
+                  ctrl.getTopVideosByVotes();
+                  break;
+            default:
+                  ctrl.getAllVideos();
+        }
+
+
+      }
 
 
 });
