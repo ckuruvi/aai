@@ -47,8 +47,22 @@ app.controller('HomeController', function(HomeService, $http, $rootScope, $locat
 
     ctrl.addVideo = function(formdata) {
         // weekend check
-        if (dayOfTheWeek() == 6 || dayOfTheWeek() == 0) {
-            alertify.alert("cannot vote on weekends");
+        if (dayOfTheWeek() == 6 || dayOfTheWeek() == 1) {
+            alertify.alert("cannot add video on weekends");
+            return;
+        }
+
+        if (formdata == undefined) {
+            alertify.alert("Title, Url & Slug are required fields");
+            return;
+        } else if (formdata.title == undefined) {
+            alertify.alert("Title is a required field");
+            return;
+        } else if (formdata.url == undefined) {
+            alertify.alert("url is a required field");
+            return;
+        } else if (formdata.slug == undefined) {
+            alertify.alert("slug is a required field");
             return;
         }
         // url duplicate entry check
@@ -74,7 +88,7 @@ app.controller('HomeController', function(HomeService, $http, $rootScope, $locat
 
     ctrl.voteUp = function(data) {
          //weekend check
-        if (dayOfTheWeek() == 6 || dayOfTheWeek() == 0) {
+        if (dayOfTheWeek() == 6 || dayOfTheWeek() == 1) {
             alertify.alert("cannot vote on weekends");
             return;
         }
@@ -93,7 +107,7 @@ app.controller('HomeController', function(HomeService, $http, $rootScope, $locat
 
     ctrl.voteDown = function(data) {
         // weekend check
-        if (dayOfTheWeek() == 6 || dayOfTheWeek() == 0) {
+        if (dayOfTheWeek() == 6 || dayOfTheWeek() == 1) {
             alertify.alert("cannot vote on weekends");
             return;
         }

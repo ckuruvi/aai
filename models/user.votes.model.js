@@ -16,7 +16,6 @@ exports.insertVote = function(userId, videoId, dt) {
     return query(
             "INSERT INTO users_votes(user_id,video_id,date) VALUES($1,$2,$3) RETURNING *", [userId, videoId, dt]
         ).then(function(list) {
-            console.log("return user votes inserted data", list);
             return list;
         })
         .catch(function(err) {

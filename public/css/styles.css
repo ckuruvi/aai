@@ -1,7 +1,13 @@
-/*body{
+body{
 
-  background-color: tomato;
-}*/
+  font-family: 'Satisfy', cursive;
+}
+
+#display{
+  width:450px;
+  font-family: 'Satisfy', cursive;
+
+}
 
 @font-face {
             font-family: 'Glyphicons Halflings';
