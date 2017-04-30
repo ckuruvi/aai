@@ -47,7 +47,7 @@ app.controller('HomeController', function(HomeService, $http, $rootScope, $locat
 
     ctrl.addVideo = function(formdata) {
         // weekend check
-        if (dayOfTheWeek() == 6 || dayOfTheWeek() == 1) {
+        if (dayOfTheWeek() == 6 || dayOfTheWeek() == 0) {
             alertify.alert("cannot add video on weekends");
             return;
         }
@@ -88,7 +88,7 @@ app.controller('HomeController', function(HomeService, $http, $rootScope, $locat
 
     ctrl.voteUp = function(data) {
          //weekend check
-        if (dayOfTheWeek() == 6 || dayOfTheWeek() == 1) {
+        if (dayOfTheWeek() == 6 || dayOfTheWeek() == 0) {
             alertify.alert("cannot vote on weekends");
             return;
         }
@@ -107,7 +107,7 @@ app.controller('HomeController', function(HomeService, $http, $rootScope, $locat
 
     ctrl.voteDown = function(data) {
         // weekend check
-        if (dayOfTheWeek() == 6 || dayOfTheWeek() == 1) {
+        if (dayOfTheWeek() == 6 || dayOfTheWeek() == 0) {
             alertify.alert("cannot vote on weekends");
             return;
         }
