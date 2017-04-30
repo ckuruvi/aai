@@ -1,8 +1,18 @@
-app.controller('HomeController', function(HomeService,$http,$rootScope) {
+app.controller('HomeController', function(HomeService,$http,$rootScope,$location) {
 
     console.log('inside HomeController',$http.defaults.headers.common);
     var ctrl = this;
     var apiCall;
+
+    ctrl.logout=function(){
+
+    HomeService.logout().then(function(){
+        $http.defaults.headers.common='';
+        $rootScope.userId=''
+        $location.path('/');
+    })
+
+    }
 
     ctrl.getVotes=function(){
       console.log("inside getVotes");

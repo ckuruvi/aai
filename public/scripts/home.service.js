@@ -1,6 +1,23 @@
 app.service('HomeService', function($http){
 
-console.log(" inside HomeService ",$http.defaults.headers.common);
+console.log(" inside HomeService ");
+
+this.logout = function(){
+  auth_token=$http.defaults.headers.common['X-Auth-Token'];
+  console.log("auth_token",auth_token);
+  var url='https://proofapi.herokuapp.com/sessions/'+auth_token;
+  console.log("url",url);
+  return  $http({
+      url: url,
+      method: 'DELETE'
+    }).then(function(response){
+      console.log("unsorted datalist",response);
+      return response;
+    },function(error){
+      console.log(error);
+    });
+};
+
 
   this.getAllVideos = function(sortingParamater){
     return  $http({
