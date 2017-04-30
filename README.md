@@ -8,3 +8,12 @@
 * Submit a new video link.
 * Ability to vote-up or vote-down a video link once per day.
 * User should not be able to add or vote on the weekends(saturday & sunday).
+
+*Technologies Used*
+
+* AngularJS
+* Bootstrap
+* Alerify.js
+* NodeJS
+* ExpressJS
+* PostgreSQL
