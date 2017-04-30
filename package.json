@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/ckuruvi/aai#readme",
   "dependencies": {
+    "alertify": "^0.3.0",
     "angular": "^1.6.4",
     "angular-route": "^1.6.4",
     "body-parser": "^1.17.1",

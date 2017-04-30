@@ -1,31 +1,22 @@
+app.service('LoginService', function($http) {
 
-app.service('LoginService', function($http){
+    console.log("LoginService loaded");
 
-console.log(" inside LoginService ");
-
-  this.authenticate = function(formdata){
-
-    var body = {
-'email': 'charleskuruvila@gmail.com',
-'password': 'overgaze,decompressive,amelioration'
-};
-
-console.log("body", body);
-var jsonObj=JSON.stringify(body);
-
-      return  $http({
-          url: 'https://proofapi.herokuapp.com/sessions',
-          method: 'POST',
-          data: jsonObj,
-          headers: {'Content-Type': 'application/json'}
-        }).then(function(response){
-          console.log(response.data.data.attributes.auth_token);
-          return response.data;
-
-        },function(error){
-          console.log(error);
+    this.authenticate = function(loginFormdata) {
+        return $http({
+            url: 'https://proofapi.herokuapp.com/sessions',
+            method: 'POST',
+            data: JSON.stringify(loginFormdata),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then(function(response) {
+            //console.log(response.data.data.attributes.auth_token);
+            return response.data;
+        }).catch(function(error) {
+            //console.log("error ::",error);
+            return error;
         });
-
-  };
+    };
 
 });

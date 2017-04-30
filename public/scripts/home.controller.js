@@ -1,158 +1,132 @@
-app.controller('HomeController', function(HomeService,$http,$rootScope,$location) {
+app.controller('HomeController', function(HomeService, $http, $rootScope, $location) {
 
-    console.log('inside HomeController',$http.defaults.headers.common);
+    console.log('HomeController loaded');
+
     var ctrl = this;
-    var apiCall;
 
-    ctrl.logout=function(){
+    /*   defines the type of method to be called
+    1) getAllVideos
+    2) getTopVideosByViews
+    3) getTopVideosByVotes
+    */
+    var apiCallType;
 
-    HomeService.logout().then(function(){
-        $http.defaults.headers.common='';
-        $rootScope.userId=''
-        $location.path('/');
-    })
 
+    ctrl.logout = function() {
+        HomeService.logout().then(function() {
+            $http.defaults.headers.common = '';
+            $rootScope.userId = ''
+            $location.path('/');
+        });
     }
 
-    ctrl.getVotes=function(){
-      console.log("inside getVotes");
-      HomeService.getVotes().then(function(data){
-        console.log("getVotes data :",data);
-      })
+    ctrl.getAllVideos = function() {
+        apiCallType = 'allvideos';
+        HomeService.getAllVideos("allvideos").then(function(data) {
+            //console.log(data);
+            ctrl.videoList = data;
+        });
     }
 
+    // initial call to load to load all videos
+    ctrl.getAllVideos();
 
-
-      ctrl.getAllVideos=function(){
-        apiCall='allvideos';
-        HomeService.getAllVideos("allvideos").then( function(data){
-            console.log(data);
-           ctrl.videoList=data;
-            //ctrl.getVotes();
+    ctrl.getTopVideosByViews = function() {
+        apiCallType = "toptenbyviews";
+        HomeService.getAllVideos("toptenbyviews").then(function(data) {
+            ctrl.videoList = data;
         });
-      }
-
-      ctrl.getAllVideos();
-
-      ctrl.getTopVideosByViews=function(){
-        apiCall="toptenbyviews";
-        HomeService.getAllVideos("toptenbyviews").then( function(data){
-            console.log(data);
-           ctrl.videoList=data;
-            //ctrl.getVotes();
-        });
-      }
-
-      ctrl.getTopVideosByVotes=function(){
-        apiCall="toptenbyvotes";
-        HomeService.getAllVideos("toptenbyvotes").then( function(data){
-            console.log(data);
-           ctrl.videoList=data;
-            //ctrl.getVotes();
-        });
-      }
-
-      ctrl.addVideo=function(formdata){
-
-        if(dayOfTheWeek()==5 || dayOfTheWeek()==0){
-          alert("cannot vote on weekends");
-           return;
-        }
-
-        HomeService.getAllVideos("allvideos").then( function(data){
-
-           data.forEach(function(videoObj){
-               if(videoObj.attributes.url==formdata.url){
-                 alert("duplicate entry");
-                 return;
-               }
-           });
-           HomeService.addVideo(formdata).then(function(data){
-             console.log("add video return data",data);
-             refreshVideoList();
-
-           });
-
-        });
-
-      }
-
-      ctrl.createView=function(data){
-        var obj ={video_id:data.id};
-
-        console.log("inside createView",obj);
-        HomeService.createView(obj).then(function(data){
-          console.log("createView return data",data);
-          refreshVideoList();
-          //ctrl.getAllVideos();
-        });
-
-      }
-
-      ctrl.voteUp=function(data){
-
-        if(dayOfTheWeek()==5 || dayOfTheWeek()==0){
-          alert("cannot vote on weekends");
-           return;
-        }
-        var obj={video_id:data.id,opinion:1}
-        console.log("inside voteUp",obj,$rootScope.userId);
-        HomeService.voteCheck(data.id,$rootScope.userId).then(function(data){
-
-             if(!data.hasVoted){
-               HomeService.voteUp(obj).then(function(data){
-                 console.log("voteUp return data",data);
-                 refreshVideoList();
-                 //ctrl.getAllVideos();
-               });
-             } else {
-               alert("you can only vote once in a day");
-             }
-
-        });
-
-      }
-
-      ctrl.voteDown=function(data){
-        if(dayOfTheWeek()==5 || dayOfTheWeek()==0){
-          alert("cannot vote on weekends");
-           return;
-        }
-        var obj={video_id:data.id,opinion:-1}
-
-  HomeService.voteCheck(data.id,$rootScope.userId).then(function(data){
-
-    if(!data.hasVoted){
-      HomeService.voteDown(obj).then(function(data){
-        console.log("voteDown return data",data);
-        refreshVideoList();
-      });
-    } else {
-      alert("you can only vote once in a day");
     }
 
-      });
-      }
+    ctrl.getTopVideosByVotes = function() {
+        apiCallType = "toptenbyvotes";
+        HomeService.getAllVideos("toptenbyvotes").then(function(data) {
+            ctrl.videoList = data;
+        });
+    }
 
+    ctrl.addVideo = function(formdata) {
+        // weekend check
+        if (dayOfTheWeek() == 6 || dayOfTheWeek() == 0) {
+            alertify.alert("cannot vote on weekends");
+            return;
+        }
+        // url duplicate entry check
+        HomeService.getAllVideos("allvideos").then(function(data) {
+            data.forEach(function(videoObj) {
+                if (videoObj.attributes.url == formdata.url) {
+                    alertify.alert("duplicate entry");
+                    return;
+                }
+            });
+            HomeService.addVideo(formdata).then(function(data) {
+                refreshVideoList();
+            });
+        });
+    }  // end of addVideo function
 
-      function  dayOfTheWeek(){
-          return new Date().getDay();
-      }
+    ctrl.createView = function(data) {
+        var obj = {video_id: data.id};
+        HomeService.createView(obj).then(function(data) {
+            refreshVideoList();
+        });
+    }  // end of createView function
 
-      function refreshVideoList(){
-        switch(apiCall){
+    ctrl.voteUp = function(data) {
+         //weekend check
+        if (dayOfTheWeek() == 6 || dayOfTheWeek() == 0) {
+            alertify.alert("cannot vote on weekends");
+            return;
+        }
+        var obj = {video_id : data.id , opinion : 1};
+        // one vote per video per day check
+        HomeService.voteCheck(data.id, $rootScope.userId).then(function(data) {
+            if (!data.hasVoted) {
+                HomeService.voteUp(obj).then(function(data) {
+                    refreshVideoList();
+                });
+            } else {
+                alertify.alert("you can only vote once in a day");
+            }
+        });
+    } // end of voteUp function
+
+    ctrl.voteDown = function(data) {
+        // weekend check
+        if (dayOfTheWeek() == 6 || dayOfTheWeek() == 0) {
+            alertify.alert("cannot vote on weekends");
+            return;
+        }
+        var obj = {video_id : data.id , opinion: -1};
+          // one vote per video per day check
+        HomeService.voteCheck(data.id, $rootScope.userId).then(function(data) {
+            if (!data.hasVoted) {
+                HomeService.voteDown(obj).then(function(data) {
+                    refreshVideoList();
+                });
+            } else {
+                alertify.alert("you can only vote once in a day");
+            }
+        });
+    }  // end of voteDown function
+
+    // return the day of the week
+    function dayOfTheWeek() {
+        return new Date().getDay();
+    }
+
+    // calls the required function based on the value set for apiCallType
+    function refreshVideoList() {
+        switch (apiCallType) {
             case 'toptenbyviews':
-                  ctrl.getTopVideosByViews();
-                  break;
+                ctrl.getTopVideosByViews();
+                break;
             case 'toptenbyvotes':
-                  ctrl.getTopVideosByVotes();
-                  break;
+                ctrl.getTopVideosByVotes();
+                break;
             default:
-                  ctrl.getAllVideos();
+                ctrl.getAllVideos();
         }
-
-
-      }
-
+    }   // end of refreshVideoList function
 
 });

@@ -5,30 +5,22 @@ var utils = require('../utils/utils');
 
 
 router.post('/', function(req, res) {
-    console.log("formatted date form util function",utils.getCurrentDate());
 
+    // check for existing user vote for a video for the day
     uservotes.getvote(req.body.userId,req.body.videoId,utils.getCurrentDate()).then(function(userObject) {
 
-       console.log("userObject result",userObject,userObject.length);
-
+        // no vote exists in the database for the video if the the response list length is 0
        if(userObject.length == 0){
          uservotes.insertVote(req.body.userId,req.body.videoId,new Date()).then(function(expenseData) {
-
-          // res.sendStatus(200);
           res.send({"hasVoted":false});
          });
        }else {
-         console.log("resopnse changed to unauthorised");
-         //res.sendStatus(406);
          res.send({"hasVoted":true});
        }
-
-    }).catch(function(err) {
-        console.log('Error fetching or inserting data');
+    }).catch(function(error) {
+        console.log('Error fetching or inserting data'.error);
         res.sendStatus(500);
     });
-
-
 });
 
 module.exports = router;

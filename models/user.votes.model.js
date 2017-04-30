@@ -1,12 +1,9 @@
 var pool = require("../db/connection");
 
 
-
-exports.getvote = function(userId,videoId,dt) {
-  console.log("inside getvote",userId,videoId,dt);
+exports.getvote = function(userId, videoId, dt) {
     return query(
-            "SELECT * FROM users_votes WHERE user_id=$1 and video_id=$2 and to_char(date,'YYYY-MM-DD')=$3",
-          [userId,videoId,dt]
+            "SELECT * FROM users_votes WHERE user_id=$1 and video_id=$2 and to_char(date,'YYYY-MM-DD')=$3", [userId, videoId, dt]
         ).then(function(list) {
             return list;
         })
@@ -16,10 +13,8 @@ exports.getvote = function(userId,videoId,dt) {
 }
 
 exports.insertVote = function(userId, videoId, dt) {
-  console.log("input parameters indertVote :: ::",userId,videoId,dt);
     return query(
-           "INSERT INTO users_votes(user_id,video_id,date) VALUES($1,$2,$3) RETURNING *",
-           [userId,videoId,dt]
+            "INSERT INTO users_votes(user_id,video_id,date) VALUES($1,$2,$3) RETURNING *", [userId, videoId, dt]
         ).then(function(list) {
             console.log("return user votes inserted data", list);
             return list;
@@ -36,12 +31,10 @@ function query(sqlString, data) {
                 if (err) {
                     return reject(err);
                 }
-
                 client.query(sqlString, data, function(err, result) {
                     if (err) {
                         return reject(err);
                     }
-
                     resolve(result.rows);
                 });
             } finally {
