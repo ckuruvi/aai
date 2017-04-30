@@ -4,7 +4,6 @@ console.log(" inside HomeService ");
 
 this.logout = function(){
   auth_token=$http.defaults.headers.common['X-Auth-Token'];
-  console.log("auth_token",auth_token);
   var url='https://proofapi.herokuapp.com/sessions/'+auth_token;
   console.log("url",url);
   return  $http({
